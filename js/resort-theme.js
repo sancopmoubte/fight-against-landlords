@@ -1,4 +1,5 @@
 /* 视觉方向：非裸露成年夏日度假卡牌主题；仅装饰牌背与牌面角标，不改变斗地主玩法。 */
+// 牌面视觉：仅生成简洁的上下对角索引，避免重复的 JOKER/花色装饰破坏传统牌面留白。
 (function () {
   var variants = ['resort-back-01', 'resort-back-02', 'resort-back-03', 'resort-back-04'];
   var cursor = 0;
@@ -32,10 +33,12 @@
     rankNode.textContent = rank;
     index.appendChild(rankNode);
 
-    var suitNode = document.createElement('b');
-    suitNode.className = 'card-readable-index__suit';
-    suitNode.textContent = suit;
-    index.appendChild(suitNode);
+    if (suit) {
+      var suitNode = document.createElement('b');
+      suitNode.className = 'card-readable-index__suit';
+      suitNode.textContent = suit;
+      index.appendChild(suitNode);
+    }
     return index;
   }
 
@@ -51,7 +54,7 @@
     if (!rank) return;
 
     var isJoker = rankValue === 14 || rankValue === 15;
-    var suit = isJoker ? 'JOKER' : (suitMap[suitValue] || suitMap[0]).symbol;
+    var suit = isJoker ? '' : (suitMap[suitValue] || suitMap[0]).symbol;
     var color = isJoker ? (rankValue === 15 ? 'red' : 'black') : (suitMap[suitValue] || suitMap[0]).color;
     card.classList.add('card-with-readable-index');
     card.dataset.readableIndex = 'true';
