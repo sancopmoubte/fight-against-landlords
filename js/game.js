@@ -7,12 +7,23 @@ $(function(){
 		var play_3 = Array();	//右边玩家牌组
 		var click = 0;			//游戏开始开关变量
 		var animated = false;	//动画展示开始变量
+		var STARTING_HAPPY_BEANS = 9900000000;
+		var HAPPY_BEAN_GRANT_VERSION = '1';
+		function formatHappyBeans(value){
+			return Number(value).toLocaleString('zh-CN');
+		}
+		function setHappyBeanBalance(value){
+			var balance = Math.max(0, Math.floor(Number(value) || 0));
+			sessionStorage.setItem('key', balance);
+			$('.scoreContent span').attr('data-balance', balance).html(formatHappyBeans(balance));
+		}
 		function gameLoad(){
-			var value = sessionStorage.getItem("key");
-			if(value == null){
-				value = 500;
+			var value = sessionStorage.getItem('key');
+			if(sessionStorage.getItem('happyBeanGrantVersion') !== HAPPY_BEAN_GRANT_VERSION || value == null){
+				value = STARTING_HAPPY_BEANS;
+				sessionStorage.setItem('happyBeanGrantVersion', HAPPY_BEAN_GRANT_VERSION);
 			}
-			$(".scoreContent span").html(value);
+			setHappyBeanBalance(value);
 			//牌组点数总数据生成
 			for (var i = 1; i <= 13; i++) {
 				for (var j = 0; j <=3 ; j++) {
@@ -186,12 +197,12 @@ $(function(){
 					setTimeout(function(){
 						$('.all_poker li:last').remove();
 					},250)
-					play_2.push(all_poker[m++]);			//中间玩家牌组++
-					var poker_html = makePoker(play_2[play_2.length-1])							
-					$('.play_2').append(poker_html);
-					$('.play_2 li:last').css({left:20*i+'px'})
-					$('.play_2').css({left:-10*i+'px'})
-				},60);
+							play_2.push(all_poker[m++]);			//中间玩家牌组++
+							var poker_html = makePoker(play_2[play_2.length-1])
+							$('.play_2').append(poker_html);
+							$('.play_2 li:last').css({left:50*i+'px'})
+							$('.play_2').css({left:-25*i+'px'})
+					},60);
 				//发牌给右边玩家
 				setTimeout(function(){
 					$('.all_poker li:last').animate({top:'200px',left:'500px'},20);
@@ -220,8 +231,8 @@ $(function(){
 								//生成2号玩家的牌
 								var poker_html_2 = makePoker(play_2[i])
 								$('.play_2').append(poker_html_2);
-								$('.play_2 li:last').css({left:20*i+'px'})
-								$('.play_2').css({left:-10*i+'px'})
+								$('.play_2 li:last').css({left:50*i+'px'})
+								$('.play_2').css({left:-25*i+'px'})
 							}
 						},500)
 					},1000)
@@ -351,16 +362,16 @@ $(function(){
 							play_1 = getsort(play_1);
 						}
 					}
-					if ( landlordNum==1 ) {	//中间的人抢到地主
-						$('.play_2').append(a1);
-						$('.play_2 li:last').css({left:20*18+'px'})
-						$('.play_2').css({left:-10*18+'px'})
-						$('.play_2').append(a2);
-						$('.play_2 li:last').css({left:20*19+'px'})
-						$('.play_2').css({left:-10*19+'px'})
-						$('.play_2').append(a3);
-						$('.play_2 li:last').css({left:20*20+'px'})
-						$('.play_2').css({left:-10*20+'px'})
+						if ( landlordNum==1 ) {	//中间的人抢到地主
+							$('.play_2').append(a1);
+							$('.play_2 li:last').css({left:50*18+'px'})
+							$('.play_2').css({left:-25*18+'px'})
+							$('.play_2').append(a2);
+							$('.play_2 li:last').css({left:50*19+'px'})
+							$('.play_2').css({left:-25*19+'px'})
+							$('.play_2').append(a3);
+							$('.play_2 li:last').css({left:50*20+'px'})
+							$('.play_2').css({left:-25*20+'px'})
 						play_2.push(all_poker[51]);		//把三张牌放进中间玩家数组中
 						play_2.push(all_poker[52]);
 						play_2.push(all_poker[53]);
@@ -371,8 +382,8 @@ $(function(){
 								// 重新生成2号玩家的牌
 								var poker_html_2 = makePoker(play_2[i])
 								$('.play_2').append(poker_html_2);
-								$('.play_2 li:last').css({left:20*i+'px'})
-								$('.play_2').css({left:-10*i+'px'})
+								$('.play_2 li:last').css({left:50*i+'px'})
+								$('.play_2').css({left:-25*i+'px'})
 							}
 							//抢地主后才能开始出牌函数
 						},500)
@@ -450,7 +461,7 @@ $(function(){
 		});
 		function refreshPlaying(){
 			$('body').on('click','#ok',function(){
-				var value = $(".scoreContent span").html();
+				var value = Number(sessionStorage.getItem('key')) || STARTING_HAPPY_BEANS;
 				if(play_2.length == 0){
 					value = parseInt(value) + 50;
 				}else{
@@ -461,7 +472,7 @@ $(function(){
 						value = parseInt(value) + 50;
 					}
 				}
-				sessionStorage.setItem("key", value);
+				sessionStorage.setItem('key', value);
 				var url = window.location.href;		//重新刷新页面
 				window.location.href = url;
 			})
@@ -711,8 +722,8 @@ $(function(){
 								// 重新生成1号玩家的牌
 								var poker_html_1 = makePoker(play_2[i])
 								$('.play_2').append(poker_html_1);		
-								$('.play_2 li:last').css({left:20*i+'px'})
-								$('.play_2').css({left:-10*i+'px'})
+								$('.play_2 li:last').css({left:50*i+'px'})
+								$('.play_2').css({left:-25*i+'px'})
 							}
 							startGame(index);					//递归调用开始打牌函数
 						break;
@@ -2133,5 +2144,4 @@ $(function(){
 			}
 		}
 
-});	
-	
+	});
