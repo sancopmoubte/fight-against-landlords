@@ -131,11 +131,13 @@ li{
 .now_poker_2{
 	width: 100px;
 	height: 138px;
-	margin: -100px auto 0px;
+	margin: -100px 0 0;
 	/*position: relative;*/
 	position: absolute;
 	top:440px;
-	left: 300px;
+	left: 50%;
+	transform: translateX(-50%);
+	overflow: visible;
 }
 .now_poker_2 li{
 	position: absolute;
@@ -280,8 +282,8 @@ li{
 }
 .mid_end span{
 	position: absolute;
-	top: 60px;
-	left: 48px;
+	top: -112px;
+	left: 12px;
 	width:120px;
 	height:120px;
 	/*border:1px solid #fff;*/
@@ -453,7 +455,11 @@ li{
 
 
 .mid_end .select{
-	top:-20px;
+	top:0;
+	z-index: 50;
+	outline: 4px solid #ffe28f;
+	outline-offset: -3px;
+	box-shadow: 0 0 0 3px rgba(15, 90, 99, 0.94), 0 0 18px rgba(255, 226, 143, 0.95);
 }
 .left .select{
 	left: 20px;

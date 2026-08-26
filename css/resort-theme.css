@@ -117,6 +117,22 @@
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
 }
 
+/* 已选手牌保持同一高度，仅用金色高亮与边框明确标识，避免上下错落造成误判。 */
+.play_2 li.select {
+  top: 0 !important;
+  outline: 4px solid #ffe28f;
+  outline-offset: -3px;
+  box-shadow: 0 0 0 3px rgba(13, 74, 81, 0.96), 0 0 18px rgba(255, 226, 143, 0.95);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.38));
+}
+
+/* 中间出牌区以较宽间隔平铺多张牌，确保对子等组合逐张可辨。 */
+.now_poker_1,
+.now_poker_2,
+.now_poker_3 {
+  overflow: visible;
+}
+
 .input1,
 .input2,
 .play,
