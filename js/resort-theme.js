@@ -1,5 +1,5 @@
 /* 视觉方向：非裸露成年夏日度假卡牌主题；仅装饰牌背与牌面角标，不改变斗地主玩法。 */
-// 牌面视觉：仅生成简洁的上下对角索引，避免重复的 JOKER/花色装饰破坏传统牌面留白。
+// 牌面视觉：每张牌仅保留左上角一组数字与花色，以单角标和充足留白呈现舒适、自然的传统牌面。
 (function () {
   var variants = ['resort-back-01', 'resort-back-02', 'resort-back-03', 'resort-back-04'];
   var cursor = 0;
@@ -25,7 +25,8 @@
   function buildIndex(position, rank, suit, color, isJoker) {
     var index = document.createElement('i');
     index.className = 'card-readable-index card-readable-index--' + position +
-      ' card-readable-index--' + color + (isJoker ? ' card-readable-index--joker' : '');
+      ' card-readable-index--' + color + (isJoker ? ' card-readable-index--joker' : '') +
+      (rank === '10' ? ' card-readable-index--two-digit' : '');
     index.setAttribute('aria-hidden', 'true');
 
     var rankNode = document.createElement('b');
@@ -59,7 +60,6 @@
     card.classList.add('card-with-readable-index');
     card.dataset.readableIndex = 'true';
     card.appendChild(buildIndex('top', rank, suit, color, isJoker));
-    card.appendChild(buildIndex('bottom', rank, suit, color, isJoker));
   }
 
   function decorateWithin(root) {
