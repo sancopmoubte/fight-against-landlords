@@ -1,4 +1,5 @@
 /* 视觉方向：非裸露成年夏日度假卡牌主题；保留牌型、洗牌与发牌逻辑，仅替换牌桌和牌背视觉。 */
+/* 牌面视觉：采用经典扑克牌对角索引，数字清晰但不使用白底标签、厚边框或多余装饰。 */
 :root {
   --resort-card-radius: 8px;
   --resort-card-shadow: 0 4px 12px rgba(12, 46, 51, 0.42);
@@ -42,69 +43,72 @@
   transform: scale(1);
 }
 
-/* 标准尺寸牌体上的高可读性角标：覆盖原精灵图的小标记，但不改动其牌型与背景。 */
+/* 标准尺寸牌体上的经典对角索引：覆盖原精灵图的小标记，但不改动牌型与背景。 */
 .card-readable-index {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   display: flex;
-  width: 45px;
-  min-height: 52px;
+  width: 25px;
+  min-height: 38px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 3px 1px 2px;
-  border: 1px solid rgba(20, 54, 57, 0.24);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 1px 3px rgba(8, 37, 42, 0.28);
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   box-sizing: border-box;
   pointer-events: none;
   font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 800;
-  line-height: 0.88;
-  letter-spacing: 0.4px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.3px;
+  text-align: center;
+  text-shadow: none;
 }
 
 .card-readable-index--top {
-  top: 4px;
-  left: 4px;
+  top: 5px;
+  left: 6px;
 }
 
 .card-readable-index--bottom {
-  right: 4px;
-  bottom: 4px;
+  right: 6px;
+  bottom: 5px;
   transform: rotate(180deg);
 }
 
 .card-readable-index__rank {
-  font-size: 26px;
+  font-size: 24px;
+  line-height: 0.92;
 }
 
 .card-readable-index__suit {
-  margin-top: 1px;
-  font-size: 23px;
-  line-height: 0.76;
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 0.9;
 }
 
-.card-readable-index--red { color: #c3262d; }
-.card-readable-index--black { color: #152226; }
+.card-readable-index--red { color: #bd2634; }
+.card-readable-index--black { color: #1f2528; }
 
 .card-readable-index--joker {
-  width: 50px;
-  min-height: 44px;
-  gap: 2px;
+  width: 30px;
+  min-height: 28px;
+  justify-content: center;
 }
 
 .card-readable-index--joker .card-readable-index__rank {
-  font-size: 16px;
-  line-height: 0.95;
+  font-size: 14px;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .card-readable-index--joker .card-readable-index__suit {
-  font-size: 17px;
-  line-height: 0.8;
+  display: none;
 }
 
 .play_1 li,
