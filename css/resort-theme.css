@@ -1,5 +1,5 @@
 /* 视觉方向：非裸露成年夏日度假卡牌主题；保留牌型、洗牌与发牌逻辑，仅替换牌桌和牌背视觉。 */
-/* 牌面视觉：采用经典扑克牌对角索引，数字清晰但不使用白底标签、厚边框或多余装饰。 */
+/* 牌面视觉：遮住原图小角标，仅保留一组放大的左上数字与花色，避免重复数字干扰手牌阅读。 */
 :root {
   --resort-card-radius: 8px;
   --resort-card-shadow: 0 4px 12px rgba(12, 46, 51, 0.42);
@@ -43,13 +43,27 @@
   transform: scale(1);
 }
 
-/* 标准尺寸牌体上的经典对角索引：覆盖原精灵图的小标记，但不改动牌型与背景。 */
+/* 原精灵图自带小角标。以贴合白色牌面的无边框留白遮住它，避免和新角标双重显示。 */
+.card-with-readable-index::before {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 50px;
+  border-radius: 5px 0 7px 0;
+  background: #fffefd;
+  pointer-events: none;
+}
+
+/* 标准尺寸牌体上的唯一单角标：数字放大，花色紧随其下，J/Q/K 与数字牌一眼可辨。 */
 .card-readable-index {
   position: absolute;
   z-index: 4;
   display: flex;
-  width: 25px;
-  min-height: 38px;
+  width: 36px;
+  min-height: 46px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -65,44 +79,44 @@
   font-style: normal;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.45px;
   text-align: center;
   text-shadow: none;
 }
 
 .card-readable-index--top {
-  top: 5px;
-  left: 6px;
-}
-
-.card-readable-index--bottom {
-  right: 6px;
-  bottom: 5px;
-  transform: rotate(180deg);
+  top: 4px;
+  left: 3px;
 }
 
 .card-readable-index__rank {
-  font-size: 24px;
-  line-height: 0.92;
+  font-size: 29px;
+  line-height: 0.9;
+  white-space: nowrap;
 }
 
 .card-readable-index__suit {
-  margin-top: 0;
-  font-size: 16px;
-  line-height: 0.9;
+  margin-top: 2px;
+  font-size: 18px;
+  line-height: 0.78;
+}
+
+.card-readable-index--two-digit .card-readable-index__rank {
+  font-size: 26px;
+  letter-spacing: -1.2px;
 }
 
 .card-readable-index--red { color: #bd2634; }
 .card-readable-index--black { color: #1f2528; }
 
 .card-readable-index--joker {
-  width: 30px;
-  min-height: 28px;
+  width: 37px;
+  min-height: 38px;
   justify-content: center;
 }
 
 .card-readable-index--joker .card-readable-index__rank {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
   white-space: nowrap;
 }
