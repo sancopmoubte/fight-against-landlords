@@ -1,9 +1,9 @@
-/* 夏日牌桌钱包层：不打开时只保留右上角入口，打开后以独立面板承载欢乐豆账户与离线凭证。 */
+/* 欢乐豆账户独立于可旋转牌桌；手机左转回退时保持正向阅读和可点击操作。 */
 .wallet-toggle{
-	position:absolute;
-	top:4px;
-	right:204px;
-	z-index:120;
+	position:fixed;
+	top:max(8px, env(safe-area-inset-top));
+	right:max(12px, env(safe-area-inset-right));
+	z-index:2200;
 	min-width:120px;
 	height:32px;
 	padding:0 13px;
@@ -23,10 +23,10 @@
 .wallet-toggle:focus-visible{ outline:3px solid #a7ffe7; outline-offset:2px; }
 
 .wallet-panel{
-	position:absolute;
+	position:fixed;
 	top:50%;
 	left:50%;
-	z-index:1100;
+	z-index:2300;
 	width:720px;
 	height:628px;
 	box-sizing:border-box;
@@ -96,9 +96,8 @@
 	cursor:pointer;
 }
 .wallet-tab.is-active{ border-color:#ffe58b; background:rgba(242, 178, 57, 0.22); color:#fff5c7; }
-.wallet-pane{ position:relative; z-index:1; display:none; height:324px; }
+.wallet-pane{ position:relative; z-index:1; display:none; height:324px; overflow-y:auto; padding-right:5px; box-sizing:border-box; }
 .wallet-pane.is-active{ display:block; }
-.wallet-pane[data-wallet-panel="send"]{ overflow-y:auto; padding-right:5px; box-sizing:border-box; }
 .wallet-message{
 	position:relative;
 	z-index:1;
@@ -147,6 +146,26 @@
 .wallet-action.is-secondary{ border-color:rgba(181, 255, 224, 0.55); background:rgba(53, 139, 119, 0.55); color:#edfff8; }
 .wallet-voucher-result{ display:none; margin-top:10px; }
 .wallet-voucher-result.is-visible{ display:block; }
+.wallet-copy-dock{
+	position:sticky;
+	bottom:0;
+	margin-top:10px;
+	padding:9px 0 4px;
+	background:linear-gradient(180deg, rgba(5, 65, 62, 0), rgba(5, 65, 62, 0.98) 28%);
+}
+.wallet-copy-voucher{
+	display:block;
+	width:100%;
+	min-height:46px;
+	border-color:#ffe58b;
+	background:linear-gradient(135deg, #e4a72f, #ffe172);
+	box-shadow:0 4px 13px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.42);
+	color:#18312e;
+	font-size:16px;
+	letter-spacing:1px;
+}
+.wallet-copy-voucher:disabled{ border-color:rgba(181,255,224,.32); background:rgba(31,104,92,.52); color:rgba(236,255,248,.68); box-shadow:none; }
+.wallet-copy-dock small{ display:block; margin-top:5px; color:#bcebdc; font-size:11px; text-align:center; }
 .wallet-tip{
 	margin:12px 0 0;
 	padding:10px 11px;
@@ -167,3 +186,26 @@
 .wallet-record-amount.is-plus{ color:#9dffd1; }
 .wallet-record-amount.is-minus{ color:#ffb5ad; }
 .wallet-empty{ padding:28px; color:#b7dacd; text-align:center; }
+
+@media (max-aspect-ratio: 1/1){
+	.wallet-toggle{
+		min-width:116px;
+		height:36px;
+		font-size:14px;
+	}
+	.wallet-panel{
+		width:min(calc(100vw - 24px), 460px);
+		height:min(calc(100dvh - 24px), 690px);
+		max-height:calc(100dvh - 24px);
+		padding:16px 16px 14px;
+		border-radius:20px;
+	}
+	.wallet-header h2{ font-size:24px; }
+	.wallet-balance-card{ margin:10px 0; padding:11px 14px; }
+	.wallet-balance-card strong{ font-size:29px; }
+	.wallet-tabs{ margin-bottom:8px; gap:5px; }
+	.wallet-tab{ height:40px; font-size:13px; }
+	.wallet-pane{ height:calc(100% - 202px); min-height:220px; }
+	.wallet-panel textarea{ min-height:56px; }
+	.wallet-copy-voucher{ min-height:50px; font-size:17px; }
+}
