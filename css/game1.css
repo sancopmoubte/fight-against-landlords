@@ -30,25 +30,42 @@ li{
 	position: relative;
 	z-index: 1;
 }
-/*积分版*/
+/* 夏日度假牌桌的欢乐豆余额面板：以清晰的大额数字代替旧积分插画。 */
 .scoreFrame{
 	position: absolute;
-	width: 17%;
-	height: 130px;
-	right:15%;
-	bottom: -1px;
+	width: 250px;
+	min-height: 66px;
+	right: 24px;
+	bottom: 18px;
 	display: none;
-	background:no-repeat url(../images/score.png) center;
-	background-size: cover;
+	box-sizing: border-box;
+	border: 2px solid rgba(255, 226, 153, 0.9);
+	border-radius: 12px;
+	background: linear-gradient(135deg, rgba(7, 64, 71, 0.96), rgba(9, 35, 42, 0.96));
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
 }
 .score{
 	width: 100%;
 	float: left;
 }
 .scoreContent{
-	margin: 40px 0 0 20px;
-	float: left;
-	font-size: 22px;
+	position: relative;
+	margin: 0;
+	padding: 18px 16px;
+	float: none;
+	font-size: 20px;
+	letter-spacing: 1px;
+	white-space: nowrap;
+	color: #fff7df;
+	text-shadow: 0 2px 3px rgba(0, 0, 0, 0.64);
+}
+.scoreContent span{
+	margin-left: 6px;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: 24px;
+	font-weight: 800;
+	font-variant-numeric: tabular-nums;
+	color: #ffd971;
 }
 .left{
 	width:20%;
@@ -540,4 +557,140 @@ p{
 	position: absolute;
 	right: 40px;
 	cursor: pointer;
+}
+
+/* 可读性优化：保留原有牌型逻辑，只提高桌面、牌面和出牌区的视觉尺度。 */
+:root{
+	--card-zoom: 1.28;
+}
+
+.content{
+	min-height: 100vh;
+	background-size: cover;
+	background-position: center center;
+}
+
+/* 牌面通过 transform 放大，避免改动上游牌型识别和发牌坐标。 */
+.play_1 li,
+.play_2 li,
+.play_3 li,
+.play_4 li,
+.now_poker_1 li,
+.now_poker_2 li,
+.now_poker_3 li{
+	transform: scale(var(--card-zoom));
+	transform-origin: center center;
+}
+
+/* 中央牌堆不直接改子元素，避免覆盖洗牌动画产生的内联 transform。 */
+.all_poker{
+	transform: scale(var(--card-zoom));
+	transform-origin: 50% 50%;
+}
+
+.play_2 li{
+	transition: transform 140ms ease-out, top 140ms ease-out;
+}
+
+.play_2 li:hover{
+	transform: scale(calc(var(--card-zoom) * 1.04)) translateY(-8px);
+}
+
+@media (max-width: 900px){
+	/* 原项目以横向桌面为核心；小屏保留完整牌桌比例，并允许横向查看。 */
+	body{
+	min-width: 900px;
+	}
+
+	.content{
+	min-height: 789px;
+	}
+}
+
+/* 固定横屏游戏画布：牌桌始终按 1400 × 789 的设计尺寸绘制，避免竖屏重排削弱视觉效果。 */
+:root{
+	--fixed-game-width: 1400px;
+	--fixed-game-height: 789px;
+	--fixed-game-scale: 1;
+}
+
+html,
+body{
+	width: 100%;
+	height: 100%;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	overflow: hidden;
+	background: #041f25;
+}
+
+.content{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: var(--fixed-game-width) !important;
+	min-width: var(--fixed-game-width) !important;
+	max-width: none !important;
+	height: var(--fixed-game-height) !important;
+	min-height: var(--fixed-game-height) !important;
+	margin: 0 !important;
+	transform: translate(-50%, -50%) scale(var(--fixed-game-scale));
+	transform-origin: center center;
+}
+
+#landscapeNotice{
+	display: none;
+}
+
+html.portrait-lock #landscapeNotice{
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 28px;
+	box-sizing: border-box;
+	background: linear-gradient(145deg, #062e35, #091c25);
+	color: #fff7dc;
+	text-align: center;
+}
+
+html.portrait-lock .content{
+	display: none !important;
+}
+
+.landscapeNotice__card{
+	width: min(86vw, 360px);
+	padding: 28px 22px 26px;
+	border: 2px solid rgba(255, 222, 146, 0.86);
+	border-radius: 16px;
+	background: rgba(12, 77, 85, 0.94);
+	box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+}
+
+.landscapeNotice__device{
+	width: 72px;
+	height: 44px;
+	margin: 0 auto 18px;
+	border: 4px solid #ffe09a;
+	border-radius: 7px;
+	box-sizing: border-box;
+	transform: rotate(-90deg);
+	box-shadow: inset 0 0 0 3px rgba(255, 224, 154, 0.2);
+}
+
+.landscapeNotice__card p{
+	position: static;
+	margin: 0 0 10px;
+	font-size: 27px;
+	font-weight: 800;
+	color: #fff7dc;
+}
+
+.landscapeNotice__card small{
+	display: block;
+	font-size: 15px;
+	line-height: 1.55;
+	color: #d7f1eb;
 }

@@ -1,0 +1,168 @@
+/* 视觉方向：非裸露成年夏日度假卡牌主题；保留牌型、洗牌与发牌逻辑，仅替换牌桌和牌背视觉。 */
+:root {
+  --resort-card-radius: 8px;
+  --resort-card-shadow: 0 4px 12px rgba(12, 46, 51, 0.42);
+  --card-zoom: 1;
+}
+
+.content {
+  background: #073e45 url('../images/resort/resort-table-background.png') center center / cover no-repeat !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 220, 151, 0.22);
+}
+
+.content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(5, 34, 39, 0.08), rgba(1, 20, 23, 0.22));
+  z-index: -1;
+}
+
+.back {
+  background-color: #0e535a !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  border: 2px solid rgba(255, 232, 177, 0.9) !important;
+  border-radius: var(--resort-card-radius) !important;
+  box-shadow: var(--resort-card-shadow) !important;
+}
+
+.back.resort-back-01 { background-image: url('../images/resort/card-back-01.png') !important; }
+.back.resort-back-02 { background-image: url('../images/resort/card-back-02.png') !important; }
+.back.resort-back-03 { background-image: url('../images/resort/card-back-03.png') !important; }
+.back.resort-back-04 { background-image: url('../images/resort/card-back-04.png') !important; }
+
+.all_poker .back {
+  background-position: center 38% !important;
+}
+
+/* 保留标准牌体尺寸；数字和花色由下方独立标识层放大，不再放大整张牌。 */
+.all_poker {
+  transform: scale(1);
+}
+
+/* 标准尺寸牌体上的高可读性角标：覆盖原精灵图的小标记，但不改动其牌型与背景。 */
+.card-readable-index {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  width: 45px;
+  min-height: 52px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 3px 1px 2px;
+  border: 1px solid rgba(20, 54, 57, 0.24);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 1px 3px rgba(8, 37, 42, 0.28);
+  box-sizing: border-box;
+  pointer-events: none;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: 0.4px;
+}
+
+.card-readable-index--top {
+  top: 4px;
+  left: 4px;
+}
+
+.card-readable-index--bottom {
+  right: 4px;
+  bottom: 4px;
+  transform: rotate(180deg);
+}
+
+.card-readable-index__rank {
+  font-size: 26px;
+}
+
+.card-readable-index__suit {
+  margin-top: 1px;
+  font-size: 23px;
+  line-height: 0.76;
+}
+
+.card-readable-index--red { color: #c3262d; }
+.card-readable-index--black { color: #152226; }
+
+.card-readable-index--joker {
+  width: 50px;
+  min-height: 44px;
+  gap: 2px;
+}
+
+.card-readable-index--joker .card-readable-index__rank {
+  font-size: 16px;
+  line-height: 0.95;
+  white-space: nowrap;
+}
+
+.card-readable-index--joker .card-readable-index__suit {
+  font-size: 17px;
+  line-height: 0.8;
+}
+
+.play_1 li,
+.play_2 li,
+.play_3 li,
+.play_4 li,
+.now_poker_1 li,
+.now_poker_2 li,
+.now_poker_3 li {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.input1,
+.input2,
+.play,
+.pass {
+  min-width: 74px !important;
+  min-height: 38px !important;
+  padding: 4px 8px !important;
+  border: 1px solid rgba(255, 232, 177, 0.9) !important;
+  color: #fff9e7 !important;
+  background: linear-gradient(135deg, #0b5962, #0b3740) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.32) !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.mid_end .input1 { right: 494px !important; }
+.mid_end .input2 { right: 394px !important; }
+
+#gameGuide {
+  width: 360px !important;
+  padding: 14px 18px !important;
+  border-width: 2px !important;
+}
+
+#gameGuide .guide-label {
+  font-size: 14px !important;
+}
+
+#gameGuide .guide-message {
+  font-size: 22px !important;
+  line-height: 1.4 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.65);
+}
+
+.left_min p,
+.mid_end p,
+.right_min p,
+.rank {
+  font-size: 20px !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.72);
+}
+
+@media (max-width: 900px) {
+  .content {
+    background-position: center top !important;
+  }
+}
