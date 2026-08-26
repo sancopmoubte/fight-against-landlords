@@ -317,16 +317,42 @@
 		renderHistory();
 	}
 
-	function copyText(value) {
-		if (!value) return Promise.reject(new Error('暂无可复制内容'));
-		if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(value);
+	function legacyCopyText(value) {
 		var textarea = document.createElement('textarea');
 		textarea.value = value;
+		textarea.setAttribute('readonly', 'readonly');
+		textarea.setAttribute('aria-hidden', 'true');
+		textarea.style.cssText = 'position:fixed;top:0;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
 		document.body.appendChild(textarea);
+		textarea.focus({ preventScroll: true });
 		textarea.select();
-		document.execCommand('copy');
-		textarea.remove();
-		return Promise.resolve();
+		textarea.setSelectionRange(0, textarea.value.length);
+		var copied = false;
+		try {
+			copied = document.execCommand('copy');
+		} finally {
+			textarea.remove();
+		}
+		if (!copied) throw new Error('浏览器未允许自动复制');
+	}
+
+	async function copyText(value) {
+		if (!value) throw new Error('请先生成转账凭证');
+		var clipboardError = null;
+		if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+			try {
+				await navigator.clipboard.writeText(value);
+				return 'clipboard';
+			} catch (error) {
+				clipboardError = error;
+			}
+		}
+		try {
+			legacyCopyText(value);
+			return 'legacy';
+		} catch (error) {
+			throw new Error(clipboardError ? '复制被浏览器阻止，请长按凭证文本后手动复制' : '浏览器未允许自动复制，请长按凭证文本后手动复制');
+		}
 	}
 
 	function setMessage(message, type) {
@@ -382,9 +408,9 @@
 		document.getElementById('walletCopyAddress').addEventListener('click', function () {
 			copyText(getAddress()).then(function () { setMessage('欢乐豆收款地址已复制。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
 		});
-		document.getElementById('walletCopyVoucher').addEventListener('click', function () {
-			copyText(document.getElementById('walletVoucherOutput').value).then(function () { setMessage('离线转账凭证已复制，可发送给收款方。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
-		});
+			document.getElementById('walletCopyVoucher').addEventListener('click', function () {
+				copyText(document.getElementById('walletVoucherOutput').value).then(function () { setMessage('离线转账凭证已复制，可发送给收款方。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
+			});
 
 		document.getElementById('walletSendForm').addEventListener('submit', async function (event) {
 			event.preventDefault();
@@ -394,7 +420,12 @@
 				var voucher = await createVoucher(document.getElementById('walletRecipient').value, document.getElementById('walletSendAmount').value);
 				document.getElementById('walletVoucherOutput').value = voucher;
 				document.getElementById('walletVoucherResult').classList.add('is-visible');
-				setMessage('凭证已生成，欢乐豆已从本机余额扣除。请复制凭证发给收款方。', 'success');
+				try {
+					await copyText(voucher);
+					setMessage('凭证已生成并复制，欢乐豆已从本机余额扣除。可直接发送给收款方。', 'success');
+				} catch (copyError) {
+					setMessage('凭证已生成，欢乐豆已从本机余额扣除。请点击“复制转账凭证”发送给收款方。', 'success');
+				}
 			} catch (error) {
 				setMessage(error.message, 'error');
 			} finally {

@@ -5,12 +5,13 @@
 	var feedbackTimer = null;
 	var landscapeRequested = false;
 	var settleTimer = null;
+	var lastDevicePixelRatio = window.devicePixelRatio || 1;
 
 	function getViewportSize() {
-		var viewport = window.visualViewport;
 		return {
-			width: (viewport && viewport.width) || window.innerWidth || document.documentElement.clientWidth,
-			height: (viewport && viewport.height) || window.innerHeight || document.documentElement.clientHeight
+			/* 使用布局视口：浏览器页面缩放或双指缩放只改变 visualViewport，不能再次缩小固定牌桌。 */
+			width: window.innerWidth || document.documentElement.clientWidth,
+			height: window.innerHeight || document.documentElement.clientHeight
 		};
 	}
 
@@ -32,10 +33,33 @@
 		root.classList.toggle('landscape-left-fallback', useLeftRotation);
 	}
 
-	window.addEventListener('resize', updateFixedCanvas);
-	window.addEventListener('orientationchange', updateFixedCanvas);
+	function isVisualZoomActive() {
+		var viewport = window.visualViewport;
+		return Boolean(viewport && Math.abs((viewport.scale || 1) - 1) > 0.01);
+	}
+
+	function handleWindowResize() {
+		var currentRatio = window.devicePixelRatio || 1;
+		/* 桌面浏览器页面缩放通常同时触发 resize 与 DPR 改变；保留当前画布比例和对局状态。 */
+		if (Math.abs(currentRatio - lastDevicePixelRatio) > 0.01) {
+			lastDevicePixelRatio = currentRatio;
+			return;
+		}
+		if (!isVisualZoomActive()) scheduleCanvasUpdates();
+	}
+
+	function handleOrientationChange() {
+		lastDevicePixelRatio = window.devicePixelRatio || 1;
+		scheduleCanvasUpdates();
+	}
+
+	window.addEventListener('resize', handleWindowResize);
+	window.addEventListener('orientationchange', handleOrientationChange);
 	if (window.visualViewport) {
-		window.visualViewport.addEventListener('resize', updateFixedCanvas);
+		window.visualViewport.addEventListener('resize', function () {
+			/* 双指缩放期间不改写 --fixed-game-scale，避免“放大后自动缩小”的反向适配。 */
+			if (!isVisualZoomActive()) scheduleCanvasUpdates();
+		});
 	}
 
 	function scheduleCanvasUpdates() {
