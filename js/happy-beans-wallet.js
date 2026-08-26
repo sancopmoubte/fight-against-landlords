@@ -363,6 +363,7 @@
 	}
 
 	function selectTab(tabName) {
+		if (['account', 'send', 'receive', 'history'].indexOf(tabName) === -1) return;
 		var panels = document.querySelectorAll('[data-wallet-panel]');
 		var buttons = document.querySelectorAll('[data-wallet-tab]');
 		for (var i = 0; i < panels.length; i++) panels[i].classList.toggle('is-active', panels[i].getAttribute('data-wallet-panel') === tabName);
@@ -402,30 +403,37 @@
 
 		var tabs = document.querySelectorAll('[data-wallet-tab]');
 		for (var i = 0; i < tabs.length; i++) {
-			tabs[i].addEventListener('click', function () { selectTab(this.getAttribute('data-wallet-tab')); });
+			tabs[i].addEventListener('click', function (event) {
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				try {
+					selectTab(this.getAttribute('data-wallet-tab'));
+				} catch (error) {
+					console.warn('欢乐豆账户标签切换失败', error);
+					setMessage('账户面板暂时无法切换，请关闭后重试；当前对局不会受影响。', 'error');
+				}
+			});
 		}
 
 		document.getElementById('walletCopyAddress').addEventListener('click', function () {
 			copyText(getAddress()).then(function () { setMessage('欢乐豆收款地址已复制。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
 		});
-			document.getElementById('walletCopyVoucher').addEventListener('click', function () {
-				copyText(document.getElementById('walletVoucherOutput').value).then(function () { setMessage('离线转账凭证已复制，可发送给收款方。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
-			});
+		document.getElementById('walletCopyVoucher').addEventListener('click', function (event) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			copyText(document.getElementById('walletVoucherOutput').value).then(function () { setMessage('离线转账凭证已复制，可发送给收款方。', 'success'); }).catch(function (error) { setMessage(error.message, 'error'); });
+		});
 
 		document.getElementById('walletSendForm').addEventListener('submit', async function (event) {
 			event.preventDefault();
+			event.stopImmediatePropagation();
 			var button = document.getElementById('walletCreateVoucher');
 			button.disabled = true;
 			try {
 				var voucher = await createVoucher(document.getElementById('walletRecipient').value, document.getElementById('walletSendAmount').value);
 				document.getElementById('walletVoucherOutput').value = voucher;
 				document.getElementById('walletVoucherResult').classList.add('is-visible');
-				try {
-					await copyText(voucher);
-					setMessage('凭证已生成并复制，欢乐豆已从本机余额扣除。可直接发送给收款方。', 'success');
-				} catch (copyError) {
-					setMessage('凭证已生成，欢乐豆已从本机余额扣除。请点击“复制转账凭证”发送给收款方。', 'success');
-				}
+				setMessage('凭证已生成，欢乐豆已从本机余额扣除。请点击“复制转账凭证”后发送给收款方。', 'success');
 			} catch (error) {
 				setMessage(error.message, 'error');
 			} finally {
@@ -435,6 +443,7 @@
 
 		document.getElementById('walletReceiveForm').addEventListener('submit', async function (event) {
 			event.preventDefault();
+			event.stopImmediatePropagation();
 			var button = document.getElementById('walletReceiveVoucher');
 			button.disabled = true;
 			try {
