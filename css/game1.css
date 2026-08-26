@@ -568,6 +568,55 @@ p{
 	cursor: pointer;
 }
 
+/* 右上角工具区：横屏操作不侵占中央落桌牌、手牌或出牌按钮。 */
+.landscape-toggle{
+	position:absolute;
+	top:4px;
+	right:84px;
+	z-index:120;
+	min-width:108px;
+	height:32px;
+	padding:0 13px;
+	border:1px solid rgba(255, 231, 150, 0.95);
+	border-radius:16px;
+	background:linear-gradient(135deg, rgba(5, 53, 62, 0.97), rgba(10, 94, 101, 0.97));
+	box-shadow:0 2px 8px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+	color:#fff6d6;
+	font-size:15px;
+	font-weight:bold;
+	letter-spacing:1px;
+	cursor:pointer;
+	transition:transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background 140ms ease-out, box-shadow 140ms ease-out;
+}
+.landscape-toggle:hover{
+	background:linear-gradient(135deg, rgba(11, 87, 95, 0.99), rgba(17, 122, 123, 0.99));
+	box-shadow:0 3px 12px rgba(0, 0, 0, 0.55), 0 0 11px rgba(255, 223, 111, 0.35);
+}
+.landscape-toggle:active{ transform:scale(0.96); }
+.landscape-toggle:focus-visible{ outline:3px solid #ffe44f; outline-offset:2px; }
+.landscape-toggle:disabled{ cursor:wait; opacity:0.72; }
+.landscape-feedback{
+	position:absolute;
+	top:42px;
+	right:84px;
+	z-index:121;
+	max-width:238px;
+	padding:7px 10px;
+	border:1px solid rgba(255, 229, 135, 0.74);
+	border-radius:9px;
+	background:rgba(5, 43, 50, 0.94);
+	box-shadow:0 4px 12px rgba(0, 0, 0, 0.42);
+	color:#fff7de;
+	font-size:13px;
+	line-height:1.35;
+	text-align:right;
+	opacity:0;
+	pointer-events:none;
+	transform:translateY(-4px);
+	transition:opacity 160ms ease-out, transform 160ms ease-out;
+}
+.landscape-feedback.is-visible{ opacity:1; transform:translateY(0); }
+
 /* 可读性优化：保留原有牌型逻辑，只提高桌面、牌面和出牌区的视觉尺度。 */
 :root{
 	--card-zoom: 1.28;
