@@ -6,9 +6,10 @@ $(function(){
 		var play_2 = Array();	//中边玩家牌组
 		var play_3 = Array();	//右边玩家牌组
 		var click = 0;			//游戏开始开关变量
-		var animated = false;	//动画展示开始变量
-		var STARTING_HAPPY_BEANS = 9900000000;
-		var HAPPY_BEAN_GRANT_VERSION = '1';
+			var animated = false;	//动画展示开始变量
+			var STARTING_HAPPY_BEANS = 9900000000;
+			var HAPPY_BEAN_GRANT_VERSION = '1';
+			var PLAYED_CARD_SPACING = 62;
 		function formatHappyBeans(value){
 			return Number(value).toLocaleString('zh-CN');
 		}
@@ -459,24 +460,21 @@ $(function(){
 		$('.content').on('click','#ok',function(){
 			$('#tishi').css('display','none');	
 		});
-		function refreshPlaying(){
-			$('body').on('click','#ok',function(){
-				var value = Number(sessionStorage.getItem('key')) || STARTING_HAPPY_BEANS;
-				if(play_2.length == 0){
-					value = parseInt(value) + 50;
-				}else{
-					var victory = $('#tishi h6').html()
-					if(victory == '地主赢了！点击再来一把'){
-						value = value - 50;
-					}else{
-						value = parseInt(value) + 50;
-					}
-				}
-				sessionStorage.setItem('key', value);
-				var url = window.location.href;		//重新刷新页面
-				window.location.href = url;
-			})
-		}
+			function settleHappyBeans(dizhuNumber, winnerIndex){
+				var stored = sessionStorage.getItem('key');
+				var current = stored === null ? STARTING_HAPPY_BEANS : Math.max(0, Math.floor(Number(stored) || 0));
+				var userWon = winnerIndex == 2 || (dizhuNumber != 2 && dizhuNumber != winnerIndex);
+				var delta = userWon ? 50 : -50;
+				var next = Math.max(0, current + delta);
+				setHappyBeanBalance(next);
+				return { delta: delta, balance: next };
+			}
+			function refreshPlaying(){
+				$('body').off('click.happyBeanReplay','#ok').one('click.happyBeanReplay','#ok',function(){
+					var url = window.location.href;		//重新刷新页面
+					window.location.href = url;
+				})
+			}
 		//最后三张牌函数
 		var a1;
 		var a2;
@@ -676,10 +674,12 @@ $(function(){
 						$('.now_poker_1 li').remove();
 					}
 					//让玩家的牌出到对应的位置
-					for (var i = 0; i < now_poker[0].length; i++) {
-						var li = makePoker(now_poker[0][i]);
-						$('.now_poker_'+index).append(li);
-						$('.now_poker_'+index+' li:last').css({left:20*i+'px'})
+						var playedCardWidth = Math.max(100, 100 + PLAYED_CARD_SPACING * (now_poker[0].length - 1));
+						$('.now_poker_'+index).css({width: playedCardWidth+'px'});
+						for (var i = 0; i < now_poker[0].length; i++) {
+							var li = makePoker(now_poker[0][i]);
+							$('.now_poker_'+index).append(li);
+							$('.now_poker_'+index+' li:last').css({left:PLAYED_CARD_SPACING*i+'px',zIndex:20+i})
 					}
 					//===================================删除牌型开关===============================================
 					switch(index){
@@ -711,10 +711,6 @@ $(function(){
 							if (play_2.length == 0) {
 								judgeResult(dizhuNumber,index);
 								refreshPlaying();	//重新刷新页面
-								$('body').on('click','#ok',function(){
-									var url = window.location.href;		
-									window.location.href = url;
-								})
 								clearInterval(int);
 								return 0;
 							}
@@ -792,16 +788,16 @@ $(function(){
 			startGame(index);	//继续游戏下一个玩家出牌
 		}
 		//判断结果
-		function judgeResult(dizhuNumber,index){
-			if(dizhuNumber == index){
-				$('#tishi').css('display','block');
-				
-				$('#tishi h6').html('地主赢了！点击再来一把')
-			}else{
-				$('#tishi').css('display','block');
-				
-				$('#tishi h6').html('农民赢了！点击再来一把');
-			}
+			function judgeResult(dizhuNumber,index){
+				var settlement = settleHappyBeans(dizhuNumber,index);
+				var settlementText = settlement.delta > 0 ? '欢乐豆 +50' : '欢乐豆 -50';
+				if(dizhuNumber == index){
+					$('#tishi').css('display','block');
+					$('#tishi h6').html('地主赢了！'+settlementText+'，点击再来一把')
+				}else{
+					$('#tishi').css('display','block');
+					$('#tishi h6').html('农民赢了！'+settlementText+'，点击再来一把');
+				}
 		}
 		function baodanAndbaoshuang(player){
 			if (player.length == 1) {
