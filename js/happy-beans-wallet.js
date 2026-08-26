@@ -431,8 +431,9 @@
 			button.disabled = true;
 			try {
 				var voucher = await createVoucher(document.getElementById('walletRecipient').value, document.getElementById('walletSendAmount').value);
-				document.getElementById('walletVoucherOutput').value = voucher;
-				document.getElementById('walletVoucherResult').classList.add('is-visible');
+			document.getElementById('walletVoucherOutput').value = voucher;
+			document.getElementById('walletVoucherResult').classList.add('is-visible');
+				document.getElementById('walletCopyVoucher').disabled = false;
 				setMessage('凭证已生成，欢乐豆已从本机余额扣除。请点击“复制转账凭证”后发送给收款方。', 'success');
 			} catch (error) {
 				setMessage(error.message, 'error');
