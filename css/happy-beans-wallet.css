@@ -98,6 +98,7 @@
 .wallet-tab.is-active{ border-color:#ffe58b; background:rgba(242, 178, 57, 0.22); color:#fff5c7; }
 .wallet-pane{ position:relative; z-index:1; display:none; height:324px; }
 .wallet-pane.is-active{ display:block; }
+.wallet-pane[data-wallet-panel="send"]{ overflow-y:auto; padding-right:5px; box-sizing:border-box; }
 .wallet-message{
 	position:relative;
 	z-index:1;
