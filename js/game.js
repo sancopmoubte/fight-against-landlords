@@ -7,7 +7,7 @@ $(function(){
 		var play_3 = Array();	//右边玩家牌组
 		var click = 0;			//游戏开始开关变量
 			var animated = false;	//动画展示开始变量
-			var STARTING_HAPPY_BEANS = 9999;
+			var STARTING_HAPPY_BEANS = 0;
 			var HAPPY_BEAN_GRANT_VERSION = 'wallet-v1';
 			var PLAYED_CARD_SPACING = 62;
 		function formatHappyBeans(value){
