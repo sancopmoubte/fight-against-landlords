@@ -120,10 +120,11 @@
 /* 已选手牌保持同一高度，仅用金色高亮与边框明确标识，避免上下错落造成误判。 */
 .play_2 li.select {
   top: 0 !important;
-  outline: 4px solid #ffe28f;
-  outline-offset: -3px;
-  box-shadow: 0 0 0 3px rgba(13, 74, 81, 0.96), 0 0 18px rgba(255, 226, 143, 0.95);
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.38));
+  z-index: 100;
+  outline: 6px solid #ffe44f;
+  outline-offset: 2px;
+  box-shadow: inset 0 0 0 4px rgba(129, 69, 0, 0.92), 0 0 0 3px rgba(31, 19, 2, 0.98), 0 0 26px 7px rgba(255, 215, 74, 0.98);
+  filter: brightness(1.08) saturate(1.08) drop-shadow(0 4px 5px rgba(0, 0, 0, 0.48));
 }
 
 /* 中间出牌区以较宽间隔平铺多张牌，确保对子等组合逐张可辨。 */
