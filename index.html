@@ -76,53 +76,54 @@
 	</div>
 	<img id="images" src="./images/hasaji.jpg">
 		<div id="tishi"><h6></h6><input id="ok" type="button" value="点我"></div>
-		<button id="walletToggle" class="wallet-toggle" type="button" aria-expanded="false" aria-controls="walletPanel">欢乐豆账户</button>
 			<button id="landscapeToggle" class="landscape-toggle" type="button" aria-label="进入横屏操作" aria-describedby="landscapeFeedback">横屏操作</button>
 			<div id="landscapeFeedback" class="landscape-feedback" role="status" aria-live="polite"></div>
 		<div class="sound sound_play" id="soundControl"></div>
 		<div class="video video_play" id="videoControl"></div>
-		<div id="walletPanel" class="wallet-panel" role="dialog" aria-modal="true" aria-label="欢乐豆账户与离线转账">
-			<div class="wallet-header">
-				<div><p class="wallet-eyebrow">Offline Game Ledger</p><h2>欢乐豆账户</h2></div>
-				<button id="walletClose" class="wallet-close" type="button" aria-label="关闭欢乐豆账户">×</button>
-			</div>
-			<div class="wallet-balance-card"><div><span>当前可用欢乐豆</span><strong data-wallet-balance>9,999</strong></div><div class="wallet-balance-mark">HB</div></div>
-			<div class="wallet-tabs" role="tablist">
-				<button class="wallet-tab is-active" type="button" data-wallet-tab="account">账户</button>
-				<button class="wallet-tab" type="button" data-wallet-tab="send">转账</button>
-				<button class="wallet-tab" type="button" data-wallet-tab="receive">收款</button>
-				<button class="wallet-tab" type="button" data-wallet-tab="history">记录</button>
-			</div>
-			<div class="wallet-pane is-active" data-wallet-panel="account">
-				<label for="walletAddress">我的欢乐豆收款地址</label>
-				<textarea id="walletAddress" class="wallet-address" data-wallet-address readonly></textarea>
-				<p id="walletIdentityStatus" class="wallet-address-note">打开账户后会生成本机收款地址</p>
-				<div class="wallet-action-row"><button id="walletCopyAddress" class="wallet-action is-secondary" type="button">复制收款地址</button></div>
-				<p class="wallet-tip">地址和签名密钥仅保存在当前浏览器。欢乐豆是游戏积分，不代表真实货币或可兑付资产。</p>
-			</div>
-			<div class="wallet-pane" data-wallet-panel="send">
-				<form id="walletSendForm">
-					<label for="walletRecipient">收款方欢乐豆地址</label>
-					<textarea id="walletRecipient" placeholder="粘贴对方的 HB1- 收款地址" required></textarea>
-					<label for="walletSendAmount">转账欢乐豆数量</label>
-					<input id="walletSendAmount" type="number" min="1" step="1" inputmode="numeric" placeholder="例如：50" required>
-					<div class="wallet-action-row"><button id="walletCreateVoucher" class="wallet-action" type="submit">生成离线转账凭证</button></div>
-				</form>
-				<div id="walletVoucherResult" class="wallet-voucher-result"><label for="walletVoucherOutput">发送给对方的凭证字符串</label><textarea id="walletVoucherOutput" readonly></textarea><div class="wallet-action-row"><button id="walletCopyVoucher" class="wallet-action is-secondary" type="button">复制转账凭证</button></div></div>
-			</div>
-			<div class="wallet-pane" data-wallet-panel="receive">
-				<form id="walletReceiveForm">
-					<label for="walletVoucherInput">收到的欢乐豆凭证</label>
-					<textarea id="walletVoucherInput" placeholder="粘贴对方发来的离线凭证" required></textarea>
-					<div class="wallet-action-row"><button id="walletReceiveVoucher" class="wallet-action" type="submit">验证并接收欢乐豆</button></div>
-				</form>
-				<p class="wallet-tip">系统会校验收款地址、签名和本机已接收凭证编号。离线凭证不能提供跨设备的全局账本或真实资产保障。</p>
-			</div>
-			<div class="wallet-pane" data-wallet-panel="history"><div id="walletHistoryList" class="wallet-history"></div></div>
-			<div id="walletMessage" class="wallet-message is-info" role="status" aria-live="polite">欢乐豆仅保存在当前浏览器，用于本游戏的离线积分。</div>
-		</div>
 		<video class="startVideo" id="startVideo" src="./video/EZ未来战士皮肤_超清.mp4"></video>
-</div>
+	</div>
+	<button id="walletToggle" class="wallet-toggle" type="button" aria-expanded="false" aria-controls="walletPanel">欢乐豆账户</button>
+	<div id="walletPanel" class="wallet-panel" role="dialog" aria-modal="true" aria-label="欢乐豆账户与离线转账">
+		<div class="wallet-header">
+			<div><p class="wallet-eyebrow">Offline Game Ledger</p><h2>欢乐豆账户</h2></div>
+			<button id="walletClose" class="wallet-close" type="button" aria-label="关闭欢乐豆账户">×</button>
+		</div>
+		<div class="wallet-balance-card"><div><span>当前可用欢乐豆</span><strong data-wallet-balance>9,999</strong></div><div class="wallet-balance-mark">HB</div></div>
+		<div class="wallet-tabs" role="tablist">
+			<button class="wallet-tab is-active" type="button" data-wallet-tab="account">账户</button>
+			<button class="wallet-tab" type="button" data-wallet-tab="send">转账</button>
+			<button class="wallet-tab" type="button" data-wallet-tab="receive">收款</button>
+			<button class="wallet-tab" type="button" data-wallet-tab="history">记录</button>
+		</div>
+		<div class="wallet-pane is-active" data-wallet-panel="account">
+			<label for="walletAddress">我的欢乐豆收款地址</label>
+			<textarea id="walletAddress" class="wallet-address" data-wallet-address readonly></textarea>
+			<p id="walletIdentityStatus" class="wallet-address-note">打开账户后会生成本机收款地址</p>
+			<div class="wallet-action-row"><button id="walletCopyAddress" class="wallet-action is-secondary" type="button">复制收款地址</button></div>
+			<p class="wallet-tip">地址和签名密钥仅保存在当前浏览器。欢乐豆是游戏积分，不代表真实货币或可兑付资产。</p>
+		</div>
+		<div class="wallet-pane" data-wallet-panel="send">
+			<form id="walletSendForm">
+				<label for="walletRecipient">收款方欢乐豆地址</label>
+				<textarea id="walletRecipient" placeholder="粘贴对方的 HB1- 收款地址" required></textarea>
+				<label for="walletSendAmount">转账欢乐豆数量</label>
+				<input id="walletSendAmount" type="number" min="1" step="1" inputmode="numeric" placeholder="例如：50" required>
+				<div class="wallet-action-row"><button id="walletCreateVoucher" class="wallet-action" type="submit">生成离线转账凭证</button></div>
+			</form>
+			<div id="walletVoucherResult" class="wallet-voucher-result"><label for="walletVoucherOutput">发送给对方的凭证字符串</label><textarea id="walletVoucherOutput" readonly></textarea></div>
+			<div class="wallet-copy-dock"><button id="walletCopyVoucher" class="wallet-action wallet-copy-voucher" type="button" disabled>复制转账凭证</button><small>生成凭证后，点击此按钮才会复制。</small></div>
+		</div>
+		<div class="wallet-pane" data-wallet-panel="receive">
+			<form id="walletReceiveForm">
+				<label for="walletVoucherInput">收到的欢乐豆凭证</label>
+				<textarea id="walletVoucherInput" placeholder="粘贴对方发来的离线凭证" required></textarea>
+				<div class="wallet-action-row"><button id="walletReceiveVoucher" class="wallet-action" type="submit">验证并接收欢乐豆</button></div>
+			</form>
+			<p class="wallet-tip">系统会校验收款地址、签名和本机已接收凭证编号。离线凭证不能提供跨设备的全局账本或真实资产保障。</p>
+		</div>
+		<div class="wallet-pane" data-wallet-panel="history"><div id="walletHistoryList" class="wallet-history"></div></div>
+		<div id="walletMessage" class="wallet-message is-info" role="status" aria-live="polite">欢乐豆仅保存在当前浏览器，用于本游戏的离线积分。</div>
+	</div>
 <!-- <div class="logo"></div> -->
 <!--	背景音乐          -->
 <audio id="bgmusic" src="Sound/MusicEx/doudizhu-cheerful-bgm.mp3" loop="loop"></audio>
