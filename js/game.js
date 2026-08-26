@@ -7,21 +7,35 @@ $(function(){
 		var play_3 = Array();	//右边玩家牌组
 		var click = 0;			//游戏开始开关变量
 			var animated = false;	//动画展示开始变量
-			var STARTING_HAPPY_BEANS = 9900000000;
-			var HAPPY_BEAN_GRANT_VERSION = '1';
+			var STARTING_HAPPY_BEANS = 9999;
+			var HAPPY_BEAN_GRANT_VERSION = 'wallet-v1';
 			var PLAYED_CARD_SPACING = 62;
 		function formatHappyBeans(value){
 			return Number(value).toLocaleString('zh-CN');
 		}
-		function setHappyBeanBalance(value){
+		function getHappyBeanBalance(){
+			if(window.HappyBeansWallet && typeof window.HappyBeansWallet.getBalance === 'function'){
+				return window.HappyBeansWallet.getBalance();
+			}
+			var stored = sessionStorage.getItem('key');
+			return stored === null ? STARTING_HAPPY_BEANS : Math.max(0, Math.floor(Number(stored) || 0));
+		}
+		function setHappyBeanBalance(value, transaction){
 			var balance = Math.max(0, Math.floor(Number(value) || 0));
+			if(window.HappyBeansWallet){
+				if(transaction && transaction.type === 'game'){
+					balance = window.HappyBeansWallet.applyGameDelta(transaction.delta, transaction.label);
+				}else if(typeof window.HappyBeansWallet.setBalance === 'function'){
+					balance = window.HappyBeansWallet.setBalance(balance);
+				}
+			}
 			sessionStorage.setItem('key', balance);
 			$('.scoreContent span').attr('data-balance', balance).html(formatHappyBeans(balance));
 		}
-		function gameLoad(){
-			var value = sessionStorage.getItem('key');
-			if(sessionStorage.getItem('happyBeanGrantVersion') !== HAPPY_BEAN_GRANT_VERSION || value == null){
-				value = STARTING_HAPPY_BEANS;
+			function gameLoad(){
+				var value = getHappyBeanBalance();
+				if(sessionStorage.getItem('happyBeanGrantVersion') !== HAPPY_BEAN_GRANT_VERSION || value == null){
+					value = STARTING_HAPPY_BEANS;
 				sessionStorage.setItem('happyBeanGrantVersion', HAPPY_BEAN_GRANT_VERSION);
 			}
 			setHappyBeanBalance(value);
@@ -461,12 +475,15 @@ $(function(){
 			$('#tishi').css('display','none');	
 		});
 			function settleHappyBeans(dizhuNumber, winnerIndex){
-				var stored = sessionStorage.getItem('key');
-				var current = stored === null ? STARTING_HAPPY_BEANS : Math.max(0, Math.floor(Number(stored) || 0));
+				var current = getHappyBeanBalance();
 				var userWon = winnerIndex == 2 || (dizhuNumber != 2 && dizhuNumber != winnerIndex);
 				var delta = userWon ? 50 : -50;
 				var next = Math.max(0, current + delta);
-				setHappyBeanBalance(next);
+				setHappyBeanBalance(next, {
+					type: 'game',
+					delta: next - current,
+					label: userWon ? '斗地主胜利结算 +50' : '斗地主失败结算 -50'
+				});
 				return { delta: delta, balance: next };
 			}
 			function refreshPlaying(){
