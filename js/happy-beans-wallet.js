@@ -4,7 +4,7 @@
 
 	var STORE_KEY = 'happyBeansWalletV1';
 	var LEGACY_BALANCE_KEY = 'key';
-	var DEFAULT_BALANCE = 9999;
+	var DEFAULT_BALANCE = 0;
 	var ADDRESS_PREFIX = 'HB1-';
 	var state;
 	var subscribers = [];
