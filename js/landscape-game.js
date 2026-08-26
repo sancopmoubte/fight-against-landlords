@@ -44,27 +44,6 @@
 		settleTimer = window.setTimeout(updateFixedCanvas, 460);
 	}
 
-	function waitForViewportSettle() {
-		return new Promise(function (resolve) {
-			window.setTimeout(function () {
-				scheduleCanvasUpdates();
-				resolve();
-			}, 460);
-		});
-	}
-
-	function isFullscreenActive() {
-		return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-	}
-
-	function requestPageFullscreen(root) {
-		var request = root.requestFullscreen || root.webkitRequestFullscreen;
-		if (!isFullscreenActive() && request) {
-			return Promise.resolve(request.call(root));
-		}
-		return Promise.resolve();
-	}
-
 	function showLandscapeFeedback(message) {
 		var feedback = document.getElementById('landscapeFeedback');
 		if (!feedback) return;
@@ -80,42 +59,26 @@
 		var button = document.getElementById('landscapeToggle');
 		if (!button) return;
 
-		button.addEventListener('click', async function () {
+		/* 横屏只调整本页画布，避免部分移动浏览器在全屏/方向锁定时重建页面。 */
+		button.addEventListener('pointerdown', function (event) {
+			event.stopPropagation();
+		});
+
+		button.addEventListener('click', function (event) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			button.disabled = true;
 			landscapeRequested = true;
 			scheduleCanvasUpdates();
-			var fullscreenSucceeded = false;
-			var lockSucceeded = false;
-			try {
-				var root = document.documentElement;
-				await requestPageFullscreen(root);
-				fullscreenSucceeded = isFullscreenActive();
-
-				var orientation = window.screen && window.screen.orientation;
-				if (orientation && typeof orientation.lock === 'function') {
-					try {
-						await orientation.lock('landscape');
-						lockSucceeded = true;
-					} catch (lockError) {
-						lockSucceeded = false;
-					}
-				}
-			} catch (fullscreenError) {
-				fullscreenSucceeded = false;
-			} finally {
-				await waitForViewportSettle();
+			window.setTimeout(function () {
 				var stillPortrait = isPortraitViewport(getViewportSize());
 				if (stillPortrait) {
-					showLandscapeFeedback('已切换左转横屏牌桌；请将手机向左横置以获得全屏横向画面');
-				} else if (lockSucceeded) {
-					showLandscapeFeedback('已进入横屏操作');
-				} else if (fullscreenSucceeded) {
-					showLandscapeFeedback('已进入全屏横屏画面');
+					showLandscapeFeedback('已切换左转横屏牌桌；当前对局会保持不变');
 				} else {
-					showLandscapeFeedback('已切换左转横屏牌桌；浏览器未能进入全屏');
+					showLandscapeFeedback('已切换横屏牌桌；当前对局会保持不变');
 				}
 				button.disabled = false;
-			}
+			}, 280);
 		});
 	}
 
