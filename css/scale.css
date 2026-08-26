@@ -1,0 +1,119 @@
+/* 可读性优化：保留原有游戏逻辑，只增强牌桌与牌面的视觉尺度。 */
+
+:root {
+  
+  --card-zoom: 1.28;
+  
+}
+
+
+
+.content {
+  
+  min-height: 100vh;
+  
+  background-size: cover;
+  
+  background-position: center center;
+  
+}
+
+
+
+/* 中央牌堆单独缩放，避免覆盖洗牌动画写入的牌面 transform。 */
+
+.all_poker {
+  
+  transform: scale(var(--card-zoom));
+  
+  transform-origin: 50% 50%;
+  
+}
+
+
+
+/* 放大手牌、底牌与桌面出牌区域，使点数与花色更易辨识。 */
+
+.play_1 li,
+
+.play_2 li,
+
+.play_3 li,
+
+.play_4 li,
+
+.now_poker_1 li,
+
+.now_poker_2 li,
+
+.now_poker_3 li {
+  
+  transform: scale(var(--card-zoom));
+  
+  transform-origin: center center;
+  
+}
+
+
+
+.play_2 li {
+  
+  transition: transform 140ms ease-out, top 140ms ease-out;
+  
+}
+
+
+
+.play_2 li:hover {
+  
+  transform: scale(calc(var(--card-zoom) * 1.04)) translateY(-8px);
+  
+}
+
+
+
+@media (max-width: 900px) {
+  
+  /* 原项目以横向桌面为核心；保留完整牌桌比例，允许小屏横向查看。 */
+  
+  body {
+    
+    min-width: 900px;
+    
+  }
+  
+
+  
+  .content {
+    
+    min-height: 789px;
+    
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
