@@ -1,0 +1,55 @@
+/* 操作引导：以半透明牌桌提示帮助首次玩家进入发牌与回合流程。 */
+#gameGuide {
+  position: absolute;
+  z-index: 1000;
+  top: 92px;
+  left: 50%;
+  width: 300px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  color: #fff7d3;
+  background: linear-gradient(135deg, rgba(10, 33, 48, 0.94), rgba(30, 83, 87, 0.9));
+  border: 1px solid rgba(255, 224, 133, 0.78);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+#gameGuide .guide-label {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffd46a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+#gameGuide .guide-message {
+  display: block;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+#gameGuide.guide-dealing {
+  border-color: rgba(132, 224, 255, 0.9);
+}
+
+#gameGuide.guide-turn {
+  border-color: rgba(255, 205, 77, 1);
+  animation: guidePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes guidePulse {
+  0%, 100% { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); }
+  50% { box-shadow: 0 12px 34px rgba(255, 205, 77, 0.45); }
+}
+
+@media (max-width: 900px) {
+  #gameGuide {
+    left: 450px;
+    transform: none;
+  }
+}
