@@ -7,13 +7,23 @@
 		<link rel="stylesheet" type="text/css" href="./css/game1.css">
 		<link rel="stylesheet" type="text/css" href="./css/scale.css">
 		<link rel="stylesheet" type="text/css" href="./css/guide.css">
+		<link rel="stylesheet" type="text/css" href="./css/resort-theme.css">
 		<!-- <link rel="stylesheet" type="text/css" href="./css/game1.css"> -->
 		<!-- 加载JQ -->
 		<script type="text/javascript" src="./js/jquery-3.1.0.min.js"></script>
 		<script type="text/javascript" src="./js/game.js"></script>
 		<script type="text/javascript" src="./js/guide.js"></script>
+		<script type="text/javascript" src="./js/resort-theme.js"></script>
+		<script type="text/javascript" src="./js/landscape-game.js"></script>
 </head>
 <body>
+	<div id="landscapeNotice" role="status" aria-live="polite">
+		<div class="landscapeNotice__card">
+			<div class="landscapeNotice__device" aria-hidden="true"></div>
+			<p>请横置设备</p>
+			<small>横屏后可保持完整牌桌与清晰手牌</small>
+		</div>
+	</div>
 <div class="content">
 	<div class="left">
 		<div class="left_min">
@@ -67,7 +77,7 @@
 		</div>
 	</div>
 	<div class="scoreFrame">
-		<p class="scoreContent">积分:<span>500</span></p>
+		<p class="scoreContent">欢乐豆 <span data-balance="9900000000">9,900,000,000</span></p>
 	</div>
 	<img id="images" src="./images/hasaji.jpg">
 	<div id="tishi"><h6></h6><input id="ok" type="button" value="点我"></div>
