@@ -63,7 +63,9 @@ $(function(){
 				});
 			}
 		}
-		gameLoad();
+		$(function(){
+			gameLoad();
+		});
 		$("#soundControl").on("click",function(){
 			var video = document.getElementById("startVideo");
 			var music = document.getElementById("bgmusic"); 
@@ -256,29 +258,36 @@ $(function(){
 		}
 
 		//======================================================================================================
-		//牌面生成
+		//牌面生成：使用 hayeah/playing-cards-assets 的成熟开源SVG牌面。
+		//data 数值映射保持不变，只替换视觉资源，不触及斗地主规则。
 		function makePoker(data){
-			var data = data;
 			var poker_arr = data.split('_');
-			var arr = Array(
-				Array(-43, -222),	//方块
-				Array(-43, -47),	//梅花
-				Array(-158, -47),	//红桃
-				Array(-158, -222)	//黑桃
-			);		//保存各花色的坐标
-			if (poker_arr[0] != 14&&poker_arr[0] != 15) {
-				var x = arr[poker_arr[1]][0];	
-				var y = arr[poker_arr[1]][1];
-			}else{
-				if (poker_arr[1] == 0) {
-					var x = -158;
-					var y =-46;
-				}else{
-					var x = -43;
-					var y = -46;
-				}
+			var rankValue = Number(poker_arr[0]);
+			var suitValue = Number(poker_arr[1]);
+			var rankNames = {
+				1: '3', 2: '4', 3: '5', 4: '6', 5: '7', 6: '8', 7: '9', 8: '10',
+				9: 'jack', 10: 'queen', 11: 'king', 12: 'ace', 13: '2'
+			};
+			var suitNames = ['diamonds', 'clubs', 'hearts', 'spades'];
+			var rankLabel = {
+				1: '3', 2: '4', 3: '5', 4: '6', 5: '7', 6: '8', 7: '9', 8: '10',
+				9: 'J', 10: 'Q', 11: 'K', 12: 'A', 13: '2', 14: '小王', 15: '大王'
+			};
+			var suitSymbols = ['方块', '梅花', '红桃', '黑桃'];
+			var assetName;
+			var label;
+			if (rankValue === 14) {
+				assetName = 'black_joker';
+				label = '小王';
+			} else if (rankValue === 15) {
+				assetName = 'red_joker';
+				label = '大王';
+			} else {
+				assetName = rankNames[rankValue] + '_of_' + suitNames[suitValue];
+				label = rankLabel[rankValue] + suitSymbols[suitValue];
 			}
-			var poker_html = '<li data="'+data+'"; style="width: 100px; height: 138px;  background: url(./images/'+poker_arr[0]+'.png) '+x+'px '+y+'px;"></li>'
+			var assetUrl = './images/open-source-cards/svg-cards/' + assetName + '.svg';
+				var poker_html = '<li class="card-vector-face" data="' + data + '" aria-label="' + label + '" style="width:100px;height:138px;background-image:url(' + assetUrl + ');background-size:100% 100%;background-position:center;background-repeat:no-repeat;"></li>';
 			return poker_html;
 		}
 		//======================================================================================================

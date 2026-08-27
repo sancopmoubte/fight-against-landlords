@@ -44,7 +44,7 @@
   }
 
   function decorateFace(card) {
-    if (!card || card.dataset.readableIndex || card.classList.contains('back')) return;
+    if (!card || card.dataset.readableIndex || card.classList.contains('back') || card.classList.contains('card-vector-face')) return;
     var value = card.getAttribute('data');
     if (!value) return;
 
@@ -57,6 +57,8 @@
     var isJoker = rankValue === 14 || rankValue === 15;
     var suit = isJoker ? '' : (suitMap[suitValue] || suitMap[0]).symbol;
     var color = isJoker ? (rankValue === 15 ? 'red' : 'black') : (suitMap[suitValue] || suitMap[0]).color;
+    card.dataset.readableSuit = suit;
+    card.dataset.readableColor = color;
     card.classList.add('card-with-readable-index');
     card.dataset.readableIndex = 'true';
     card.appendChild(buildIndex('top', rank, suit, color, isJoker));
