@@ -24,3 +24,10 @@
 
 > 游戏逻辑和静态素材保留在上游原有目录中：`js/`、`css/`、`images/`、`Sound/` 与 `video/`。
 
+
+
+## 高清开源视觉资源归属
+
+本版本使用的牌桌背景来自 [OpenGameArt Felt Backgrounds](https://opengameart.org/content/felt-backgrounds)，作者 `jbp4444`，采用 **CC0 1.0**，本地文件为 `images/open-source-table/felt-green-2048.jpg`，原始尺寸 2048×2048。
+
+54 张牌面和标准牌背来自 [hayeah/playing-cards-assets](https://github.com/hayeah/playing-cards-assets)，仓库采用 MIT 许可证，牌面素材来源说明为 public domain；对应的许可证与来源说明保存在 `images/open-source-cards/LICENSE-MIT.txt`。本项目仅替换视觉资源，斗地主发牌、叫地主、出牌判断、欢乐豆结算、离线转账和固定横屏逻辑保持原有实现。
