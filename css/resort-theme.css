@@ -1,4 +1,4 @@
-/* 视觉方向：非裸露成年夏日度假卡牌主题；保留牌型、洗牌与发牌逻辑，仅替换牌桌和牌背视觉。 */
+/* 全开源高清视觉主题：CC0绿色毛毡牌桌 + hayeah标准SVG牌面与2x牌背。 */
 /* 牌面视觉：遮住原图小角标，仅保留一组放大的左上数字与花色，避免重复数字干扰手牌阅读。 */
 :root {
   --resort-card-radius: 8px;
@@ -7,8 +7,10 @@
 }
 
 .content {
-  background: #073e45 url('../images/resort/resort-table-background.png') center center / cover no-repeat !important;
+  background: #214b3a url('../images/open-source-table/felt-green-2048.jpg') center center / cover no-repeat !important;
   box-shadow: inset 0 0 0 1px rgba(255, 220, 151, 0.22);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .content::before {
@@ -16,23 +18,26 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(5, 34, 39, 0.08), rgba(1, 20, 23, 0.22));
+  background: linear-gradient(180deg, rgba(6, 38, 26, 0.12), rgba(5, 25, 17, 0.28));
   z-index: -1;
 }
 
 .back {
-  background-color: #0e535a !important;
+  background-color: #174a36 !important;
   background-position: center center !important;
   background-size: cover !important;
-  border: 2px solid rgba(255, 232, 177, 0.9) !important;
+  border: 2px solid rgba(231, 245, 225, 0.92) !important;
   border-radius: var(--resort-card-radius) !important;
-  box-shadow: var(--resort-card-shadow) !important;
+  box-shadow: 0 4px 12px rgba(4, 24, 14, 0.48) !important;
 }
 
-.back.resort-back-01 { background-image: url('../images/resort/card-back-01.png') !important; }
-.back.resort-back-02 { background-image: url('../images/resort/card-back-02.png') !important; }
-.back.resort-back-03 { background-image: url('../images/resort/card-back-03.png') !important; }
-.back.resort-back-04 { background-image: url('../images/resort/card-back-04.png') !important; }
+/* 成熟开源标准牌背：来自 hayeah/playing-cards-assets，使用2倍PNG减少高DPI屏幕上的模糊。 */
+.back.resort-back-01,
+.back.resort-back-02,
+.back.resort-back-03,
+.back.resort-back-04 {
+  background-image: url('../images/open-source-cards/back@2x.png') !important;
+}
 
 .all_poker .back {
   background-position: center 38% !important;
@@ -43,7 +48,57 @@
   transform: scale(1);
 }
 
-/* 原精灵图自带小角标。以贴合白色牌面的无边框留白遮住它，避免和新角标双重显示。 */
+/*
+ * 成熟开源SVG正面牌：每张牌以矢量标准牌面直接绘制，避免旧300×425
+ * 精灵图插值造成的粗糙感。保留现有100×138牌体与规则、排序、选牌层。
+ */
+.content li.card-vector-face {
+  overflow: hidden;
+  border: 1px solid rgba(198, 192, 178, 0.95) !important;
+  border-radius: 8px !important;
+  background-color: #fffdf8 !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 0 3px 9px rgba(20, 38, 39, 0.34), inset 0 0 0 1px rgba(255, 255, 255, 0.72) !important;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 旧版CSS绘制卡面仅保留作兼容，不会作用于新的card-vector-face节点。 */
+.content li.card-with-readable-index {
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(198, 192, 178, 0.95) !important;
+  border-radius: 8px !important;
+  background-color: #fffdf8 !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(250, 246, 236, 0.92)) !important;
+  background-position: 0 0 !important;
+  background-size: auto !important;
+  box-shadow: 0 3px 9px rgba(20, 38, 39, 0.34), inset 0 0 0 1px rgba(255, 255, 255, 0.72) !important;
+  backface-visibility: hidden;
+}
+
+/* 中央花色作为安静的视觉锚点：增强层次，但不干扰左上数字辨识。 */
+.content li.card-with-readable-index::after {
+  content: attr(data-readable-suit);
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  color: currentColor;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 74px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.095;
+  pointer-events: none;
+  transform: translate(-50%, -47%);
+}
+.content li.card-with-readable-index[data-readable-color='red']::after { color: #bd2634; }
+.content li.card-with-readable-index[data-readable-color='black']::after { color: #1f2528; }
+
+/* 原精灵图角标后备遮蔽层，防止未完成装饰的旧节点露出重复标记。 */
 .card-with-readable-index::before {
   content: '';
   position: absolute;
@@ -82,6 +137,8 @@
   letter-spacing: -0.45px;
   text-align: center;
   text-shadow: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
 .card-readable-index--top {
